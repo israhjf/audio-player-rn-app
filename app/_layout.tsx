@@ -1,29 +1,62 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
+import { NativeBaseProvider, extendTheme } from 'native-base';
+import { AudioPlayerProvider } from '../context/AudioPlayerContext';
+import { useEffect } from 'react';
+import { Audio } from 'expo-av';
 
-import { useColorScheme } from '@/hooks/useColorScheme';
+// Configure the theme
+const theme = extendTheme({
+  config: {
+    initialColorMode: 'light',
+  },
+});
 
-export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
+export default function Layout() {
+  useEffect(() => {
+    // Configure audio session
+    const configureAudio = async () => {
+      try {
+        await Audio.setAudioModeAsync({
+          playsInSilentModeIOS: true,
+          staysActiveInBackground: true,
+          shouldDuckAndroid: true,
+        });
+      } catch (error) {
+        console.error('Error configuring audio:', error);
+      }
+    };
 
-  if (!loaded) {
-    // Async font loading only occurs in development.
-    return null;
-  }
+    configureAudio();
+  }, []);
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <NativeBaseProvider theme={theme}>
+      <AudioPlayerProvider>
+        <Stack
+          screenOptions={{
+            headerStyle: {
+              backgroundColor: theme.colors.primary[500],
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+              fontWeight: 'bold',
+            },
+          }}
+        >
+          <Stack.Screen
+            name="player"
+            options={{
+              title: 'Now Playing',
+            }}
+          />
+          <Stack.Screen
+            name="playlist"
+            options={{
+              title: 'Playlist',
+            }}
+          />
+        </Stack>
+      </AudioPlayerProvider>
+    </NativeBaseProvider>
   );
 }
