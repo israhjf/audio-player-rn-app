@@ -3,6 +3,7 @@ import { NativeBaseProvider, extendTheme } from 'native-base';
 import { AudioPlayerProvider } from '@/context/AudioPlayerContext';
 import { useEffect } from 'react';
 import { Audio } from 'expo-av';
+import SafeScreen from '@/components/SafeScreen';
 
 // Configure the theme
 const theme = extendTheme({
@@ -32,30 +33,32 @@ export default function Layout() {
   return (
     <NativeBaseProvider theme={theme}>
       <AudioPlayerProvider>
-        <Stack
-          screenOptions={{
-            headerStyle: {
-              backgroundColor: theme.colors.primary[500],
-            },
-            headerTintColor: '#fff',
-            headerTitleStyle: {
-              fontWeight: 'bold',
-            },
-          }}
-        >
-          <Stack.Screen
-            name="(player)"
-            options={{
-              title: 'Now Playing',
+        <SafeScreen>
+          <Stack
+            screenOptions={{
+              headerStyle: {
+                backgroundColor: theme.colors.primary[500],
+              },
+              headerTintColor: '#fff',
+              headerTitleStyle: {
+                fontWeight: 'bold',
+              },
             }}
-          />
-          <Stack.Screen
-            name="(home)"
-            options={{
-              title: 'Playlist',
-            }}
-          />
-        </Stack>
+          >
+            <Stack.Screen
+              name="(player)"
+              options={{
+                title: 'Now Playing',
+              }}
+            />
+            <Stack.Screen
+              name="(home)"
+              options={{
+                title: 'Playlist',
+              }}
+            />
+          </Stack>
+        </SafeScreen>
       </AudioPlayerProvider>
     </NativeBaseProvider>
   );
