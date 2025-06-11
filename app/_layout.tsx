@@ -46,15 +46,16 @@ export default function Layout() {
             }}
           >
             <Stack.Screen
-              name="(player)"
-              options={{
-                title: 'Now Playing',
-              }}
-            />
-            <Stack.Screen
               name="(home)"
               options={{
                 title: 'Playlist',
+              }}
+            />
+            <Stack.Screen
+              name="(player)"
+              options={{
+                title: 'Now Playing',
+                presentation: 'modal',
               }}
             />
           </Stack>
