@@ -1,8 +1,8 @@
 import React from 'react';
 import { Box, HStack, Icon, Pressable, Text, VStack, useColorMode } from 'native-base';
 import { MaterialIcons } from '@expo/vector-icons';
-import { useAudioPlayer } from '../context/AudioPlayerContext';
-import { AudioTrack } from '../types';
+import { useAudioPlayer } from '../../context/AudioPlayerContext';
+import { AudioTrack } from '../../types';
 import { Image, FlatList } from 'react-native';
 
 // Sample tracks - replace with your actual tracks

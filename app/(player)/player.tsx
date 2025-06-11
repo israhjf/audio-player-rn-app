@@ -1,8 +1,8 @@
 import React from 'react';
 import { Box, Button, Icon, IconButton, Slider, Text, VStack, HStack, useColorMode } from 'native-base';
 import { MaterialIcons } from '@expo/vector-icons';
-import { useAudioPlayer } from '../context/AudioPlayerContext';
-import { formatTime } from '../utils/time';
+import { useAudioPlayer } from '../../context/AudioPlayerContext';
+import { formatTime } from '../../utils/time';
 import { Image } from 'react-native';
 
 export default function PlayerScreen() {

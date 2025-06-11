@@ -1,6 +1,6 @@
 import { Stack } from 'expo-router';
 import { NativeBaseProvider, extendTheme } from 'native-base';
-import { AudioPlayerProvider } from '../context/AudioPlayerContext';
+import { AudioPlayerProvider } from '@/context/AudioPlayerContext';
 import { useEffect } from 'react';
 import { Audio } from 'expo-av';
 
@@ -44,13 +44,13 @@ export default function Layout() {
           }}
         >
           <Stack.Screen
-            name="player"
+            name="(player)"
             options={{
               title: 'Now Playing',
             }}
           />
           <Stack.Screen
-            name="playlist"
+            name="(home)"
             options={{
               title: 'Playlist',
             }}
