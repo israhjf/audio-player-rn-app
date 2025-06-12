@@ -67,6 +67,13 @@ export function AudioPlayerProvider({ children }: { children: React.ReactNode })
   const play = async (track: AudioTrack) => {
     console.log('AudioPlayerContext.tsx: Attempting to play track:', track.title);
     try {
+      if (sound && state.currentTrack?.id === track.id) {
+        console.log('AudioPlayerContext.tsx: Resuming current track from position:', state.progress);
+        await sound.playAsync();
+        dispatch({ type: 'SET_PLAYING', payload: true });
+        return;
+      }
+
       if (sound) {
         console.log('AudioPlayerContext.tsx: Unloading previous sound');
         await sound.unloadAsync();

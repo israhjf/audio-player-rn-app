@@ -59,7 +59,14 @@ const MiniPlayer = () => {
             }
             onPress={() => {
               console.log('MiniPlayer.tsx: MiniPlayer play/pause pressed');
-              state.isPlaying ? pause() : play(state.currentTrack!);
+              if (state.isPlaying) {
+                pause();
+              } else {
+                // If we have a current track, just resume playback
+                if (state.currentTrack) {
+                  play(state.currentTrack);
+                }
+              }
             }}
             variant="ghost"
           />
