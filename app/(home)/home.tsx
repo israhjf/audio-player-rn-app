@@ -148,10 +148,13 @@ export default function PlaylistScreen() {
               {item.artist}
             </Text>
           </VStack>
-          {isPlaying && (
-            <Text color="primary.500" fontSize="sm" bold>
-              Playing
-            </Text>
+          {state.currentTrack?.id === item.id && (
+            <Icon
+              as={MaterialIcons}
+              name="arrow-back"
+              size={6}
+              color="primary.500"
+            />
           )}
         </HStack>
       </Pressable>
