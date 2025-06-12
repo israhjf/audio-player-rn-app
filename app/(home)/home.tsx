@@ -85,8 +85,8 @@ export default function PlaylistScreen() {
   const { colorMode } = useColorMode();
 
   useEffect(() => {
-    console.log('index.tsx: PlaylistScreen mounted');
-    return () => console.log('index.tsx: PlaylistScreen unmounted');
+    console.log('home.tsx: PlaylistScreen mounted');
+    return () => console.log('home.tsx: PlaylistScreen unmounted');
   }, []);
 
   const renderTrack = ({ item }: { item: AudioTrack }) => {
@@ -95,7 +95,7 @@ export default function PlaylistScreen() {
     return (
       <Pressable
         onPress={() => {
-          console.log('index.tsx: PlaylistScreen: Track selected:', {
+          console.log('home.tsx: PlaylistScreen: Track selected:', {
             title: item.title,
             id: item.id,
             isCurrentlyPlaying: isPlaying
