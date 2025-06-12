@@ -2,14 +2,22 @@ import React, { useEffect } from 'react';
 import { Box, HStack, Text, IconButton, Icon, Slider } from 'native-base';
 import { TouchableOpacity, Image } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { useAudioPlayer } from '@/context/AudioPlayerContext';
-import { useRouter } from 'expo-router';
-import { sampleTracks } from '@/app/(home)/home';
-import { AudioTrack } from '@/types';
+import { useAudioPlayer } from '@/src/context/AudioPlayerContext';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { sampleTracks } from '@/src/screens/(home)/home';
+import { AudioTrack } from '@/src/types';
+
+type RootStackParamList = {
+  Playlist: undefined;
+  Player: undefined;
+};
+
+type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 const MiniPlayer = () => {
   const { state, play, pause, seek } = useAudioPlayer();
-  const router = useRouter();
+  const navigation = useNavigation<NavigationProp>();
 
   useEffect(() => {
     console.log('MiniPlayer.tsx: MiniPlayer mounted');
@@ -34,7 +42,7 @@ const MiniPlayer = () => {
   return (
     <TouchableOpacity onPress={() => {
       console.log('MiniPlayer.tsx: MiniPlayer pressed, navigating to player screen');
-      router.push('/(player)/player');
+      navigation.navigate('Player');
     }}>
       <Box bg="gray.900" px={3} py={2} borderTopWidth={1} borderColor="gray.700">
         <HStack alignItems="center" space={3}>

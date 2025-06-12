@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { Box, HStack, Icon, Pressable, Text, VStack, useColorMode } from 'native-base';
 import { MaterialIcons } from '@expo/vector-icons';
-import { useAudioPlayer } from '../../context/AudioPlayerContext';
+import { useAudioPlayer } from '@/src/context/AudioPlayerContext';
 import { AudioTrack } from '../../types';
 import { Image, FlatList } from 'react-native';
-import MiniPlayer from '@/components/MiniPlayer';
+import MiniPlayer from '@/src/components/MiniPlayer';
 
 // Sample tracks - replace with your actual tracks
 export const sampleTracks: AudioTrack[] = [
