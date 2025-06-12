@@ -4,9 +4,11 @@ import { TouchableOpacity, Image } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useAudioPlayer } from '@/context/AudioPlayerContext';
 import { useRouter } from 'expo-router';
+import { sampleTracks } from '@/app/(home)/home';
+import { AudioTrack } from '@/types';
 
 const MiniPlayer = () => {
-  const { state, play, pause, skipForward, seek } = useAudioPlayer();
+  const { state, play, pause, seek } = useAudioPlayer();
   const router = useRouter();
 
   useEffect(() => {
@@ -19,6 +21,15 @@ const MiniPlayer = () => {
   // Ensure we have valid numbers and prevent division by zero
   const progress = Math.floor(state.progress || 0);
   const duration = Math.floor(state.duration || 1); // Use 1 as fallback to prevent division by zero
+
+  const handleNextTrack = () => {
+    console.log('MiniPlayer.tsx: MiniPlayer skip forward pressed');
+    const currentIndex = sampleTracks.findIndex((track: AudioTrack) => track.id === state.currentTrack?.id);
+    if (currentIndex !== -1 && currentIndex < sampleTracks.length - 1) {
+      const nextTrack = sampleTracks[currentIndex + 1];
+      play(nextTrack);
+    }
+  };
 
   return (
     <TouchableOpacity onPress={() => {
@@ -72,10 +83,7 @@ const MiniPlayer = () => {
           />
           <IconButton
             icon={<Icon as={MaterialIcons} name="skip-next" color="white" size={6} />}
-            onPress={() => {
-              console.log('MiniPlayer.tsx: MiniPlayer skip forward pressed');
-              skipForward();
-            }}
+            onPress={handleNextTrack}
             variant="ghost"
           />
         </HStack>

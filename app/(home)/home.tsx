@@ -7,7 +7,7 @@ import { Image, FlatList } from 'react-native';
 import MiniPlayer from '@/components/MiniPlayer';
 
 // Sample tracks - replace with your actual tracks
-const sampleTracks: AudioTrack[] = [
+export const sampleTracks: AudioTrack[] = [
   {
     id: '1',
     title: 'Monkeys Spinning Monkeys',
