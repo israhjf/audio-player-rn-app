@@ -67,9 +67,9 @@ export default function PlayerScreen() {
         {/* Progress Bar */}
         <VStack space={2}>
           <Slider
-            value={state.progress}
+            value={Math.floor(state.progress)}
             defaultValue={0}
-            maxValue={state.duration}
+            maxValue={Math.floor(state.duration)}
             onChange={handleSeek}
             isDisabled={!state.currentTrack}
           >

@@ -14,20 +14,27 @@ const theme = extendTheme({
 
 export default function Layout() {
   useEffect(() => {
+    console.log('_layout.tsx: Layout mounted');
     // Configure audio session
     const configureAudio = async () => {
       try {
+        console.log('_layout.tsx: Configuring audio session');
         await Audio.setAudioModeAsync({
           playsInSilentModeIOS: true,
           staysActiveInBackground: true,
           shouldDuckAndroid: true,
         });
+        console.log('_layout.tsx: Audio session configured successfully');
       } catch (error) {
-        console.error('Error configuring audio:', error);
+        console.error('_layout.tsx: Error configuring audio:', error);
       }
     };
 
     configureAudio();
+
+    return () => {
+      console.log('_layout.tsx: Layout unmounting');
+    };
   }, []);
 
   return (

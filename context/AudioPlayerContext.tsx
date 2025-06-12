@@ -38,9 +38,9 @@ function reducer(state: PlayerState, action: Action): PlayerState {
     case 'SET_PLAYING':
       return { ...state, isPlaying: action.payload };
     case 'SET_PROGRESS':
-      return { ...state, progress: action.payload };
+      return { ...state, progress: Math.floor(action.payload) };
     case 'SET_DURATION':
-      return { ...state, duration: action.payload };
+      return { ...state, duration: Math.floor(action.payload) };
     case 'SET_PLAYBACK_RATE':
       return { ...state, playbackRate: action.payload };
     case 'RESET':
@@ -55,7 +55,9 @@ export function AudioPlayerProvider({ children }: { children: React.ReactNode })
   const [sound, setSound] = React.useState<Audio.Sound | null>(null);
 
   useEffect(() => {
+    console.log('AudioPlayerContext.tsx: Provider mounted');
     return () => {
+      console.log('AudioPlayerContext.tsx: Provider unmounting');
       if (sound) {
         sound.unloadAsync();
       }
@@ -63,10 +65,13 @@ export function AudioPlayerProvider({ children }: { children: React.ReactNode })
   }, [sound]);
 
   const play = async (track: AudioTrack) => {
+    console.log('AudioPlayerContext.tsx: Attempting to play track:', track.title);
     try {
       if (sound) {
+        console.log('AudioPlayerContext.tsx: Unloading previous sound');
         await sound.unloadAsync();
       }
+      console.log('AudioPlayerContext.tsx: Creating new sound instance');
       const { sound: newSound } = await Audio.Sound.createAsync(
         { uri: track.url },
         { shouldPlay: true, rate: state.playbackRate },
@@ -75,19 +80,22 @@ export function AudioPlayerProvider({ children }: { children: React.ReactNode })
       setSound(newSound);
       dispatch({ type: 'SET_TRACK', payload: track });
       dispatch({ type: 'SET_PLAYING', payload: true });
+      console.log('AudioPlayerContext.tsx: Track started playing:', track.title);
     } catch (error) {
-      console.error('Error playing track:', error);
+      console.error('AudioPlayerContext.tsx: Error playing track:', error);
     }
   };
 
   const pause = async () => {
+    console.log('AudioPlayerContext.tsx: Attempting to pause track');
     try {
       if (sound) {
         await sound.pauseAsync();
         dispatch({ type: 'SET_PLAYING', payload: false });
+        console.log('AudioPlayerContext.tsx: Track paused');
       }
     } catch (error) {
-      console.error('Error pausing track:', error);
+      console.error('AudioPlayerContext.tsx: Error pausing track:', error);
     }
   };
 
@@ -99,18 +107,21 @@ export function AudioPlayerProvider({ children }: { children: React.ReactNode })
         dispatch({ type: 'RESET' });
       }
     } catch (error) {
-      console.error('Error stopping track:', error);
+      console.error('AudioPlayerContext.tsx: Error stopping track:', error);
     }
   };
 
   const seek = async (position: number) => {
+    console.log('AudioPlayerContext.tsx: Attempting to seek to position:', position);
     try {
       if (sound) {
-        await sound.setPositionAsync(position);
-        dispatch({ type: 'SET_PROGRESS', payload: position });
+        const flooredPosition = Math.floor(position);
+        console.log('AudioPlayerContext.tsx: Seeking to floored position:', flooredPosition);
+        await sound.setPositionAsync(flooredPosition);
+        dispatch({ type: 'SET_PROGRESS', payload: flooredPosition });
       }
     } catch (error) {
-      console.error('Error seeking track:', error);
+      console.error('AudioPlayerContext.tsx: Error seeking track:', error);
     }
   };
 
@@ -127,7 +138,7 @@ export function AudioPlayerProvider({ children }: { children: React.ReactNode })
         }
       }
     } catch (error) {
-      console.error('Error skipping forward:', error);
+      console.error('AudioPlayerContext.tsx: Error skipping forward:', error);
     }
   };
 
@@ -141,7 +152,7 @@ export function AudioPlayerProvider({ children }: { children: React.ReactNode })
         }
       }
     } catch (error) {
-      console.error('Error skipping backward:', error);
+      console.error('AudioPlayerContext.tsx: Error skipping backward:', error);
     }
   };
 
@@ -152,14 +163,17 @@ export function AudioPlayerProvider({ children }: { children: React.ReactNode })
         dispatch({ type: 'SET_PLAYBACK_RATE', payload: rate });
       }
     } catch (error) {
-      console.error('Error setting playback rate:', error);
+      console.error('AudioPlayerContext.tsx: Error setting playback rate:', error);
     }
   };
 
   const onPlaybackStatusUpdate = (status: AVPlaybackStatus) => {
     if (status.isLoaded) {
-      dispatch({ type: 'SET_PROGRESS', payload: status.positionMillis });
-      dispatch({ type: 'SET_DURATION', payload: status.durationMillis || 0 });
+      const flooredPosition = Math.floor(status.positionMillis);
+      const flooredDuration = Math.floor(status.durationMillis || 0);
+
+      dispatch({ type: 'SET_PROGRESS', payload: flooredPosition });
+      dispatch({ type: 'SET_DURATION', payload: flooredDuration });
       dispatch({ type: 'SET_PLAYING', payload: status.isPlaying });
     }
   };
@@ -185,7 +199,7 @@ export function AudioPlayerProvider({ children }: { children: React.ReactNode })
 export function useAudioPlayer() {
   const context = useContext(AudioPlayerContext);
   if (context === undefined) {
-    throw new Error('useAudioPlayer must be used within an AudioPlayerProvider');
+    throw new Error('AudioPlayerContext.tsx: useAudioPlayer must be used within an AudioPlayerProvider');
   }
   return context;
 } 

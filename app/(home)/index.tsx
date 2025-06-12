@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Box, HStack, Icon, Pressable, Text, VStack, useColorMode } from 'native-base';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useAudioPlayer } from '../../context/AudioPlayerContext';
 import { AudioTrack } from '../../types';
 import { Image, FlatList } from 'react-native';
+import MiniPlayer from '@/components/MiniPlayer';
 
 // Sample tracks - replace with your actual tracks
 const sampleTracks: AudioTrack[] = [
@@ -83,12 +84,24 @@ export default function PlaylistScreen() {
   const { state, play } = useAudioPlayer();
   const { colorMode } = useColorMode();
 
+  useEffect(() => {
+    console.log('index.tsx: PlaylistScreen mounted');
+    return () => console.log('index.tsx: PlaylistScreen unmounted');
+  }, []);
+
   const renderTrack = ({ item }: { item: AudioTrack }) => {
     const isPlaying = state.currentTrack?.id === item.id && state.isPlaying;
 
     return (
       <Pressable
-        onPress={() => play(item)}
+        onPress={() => {
+          console.log('index.tsx: PlaylistScreen: Track selected:', {
+            title: item.title,
+            id: item.id,
+            isCurrentlyPlaying: isPlaying
+          });
+          play(item);
+        }}
         _pressed={{ opacity: 0.7 }}
       >
         <HStack
@@ -152,8 +165,9 @@ export default function PlaylistScreen() {
         data={sampleTracks}
         renderItem={renderTrack}
         keyExtractor={(item) => item.id}
-        contentContainerStyle={{ paddingBottom: 20 }}
+        contentContainerStyle={{ paddingBottom: 80 }} // Add extra space for mini player
       />
+      <MiniPlayer />
     </Box>
   );
 } 
