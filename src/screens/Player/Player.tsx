@@ -7,6 +7,7 @@ import { Image } from 'react-native';
 import { sampleTracks } from '@/src/screens/PlayList/PlayList';
 import { AudioTrack } from '../../types';
 
+
 export default function PlayerScreen() {
   const { state, play, pause, stop, seek, skipForward, skipBackward, setPlaybackRate } = useAudioPlayer();
   const { colorMode } = useColorMode();
@@ -106,11 +107,15 @@ export default function PlayerScreen() {
         <VStack space={2} alignItems="center">
           {/* First row: skip backward 15s, stop, skip forward 15s */}
           <HStack space={4} justifyContent="center" alignItems="center">
-            <IconButton
-              icon={<Icon as={MaterialIcons} name="replay-15" size={8} />}
-              onPress={skipBackward}
-              isDisabled={!state.currentTrack}
-            />
+            <VStack alignItems="center">
+              <IconButton
+                icon={<Icon as={MaterialIcons} name="fast-rewind" size={8} />}
+                onPress={skipBackward}
+                isDisabled={!state.currentTrack}
+              />
+              <Text fontSize="xs">15</Text>
+            </VStack>
+
             <IconButton
               icon={<Icon as={MaterialIcons} name="stop" size={10} />}
               onPress={async () => {
@@ -119,11 +124,14 @@ export default function PlayerScreen() {
               }}
               isDisabled={!state.currentTrack}
             />
-            <IconButton
-              icon={<Icon as={MaterialIcons} name="forward-15" size={8} />}
-              onPress={skipForward}
-              isDisabled={!state.currentTrack}
-            />
+            <VStack alignItems="center">
+              <IconButton
+                icon={<Icon as={MaterialIcons} name="fast-forward" size={8} />}
+                onPress={skipForward}
+                isDisabled={!state.currentTrack}
+              />
+              <Text fontSize="xs">15</Text>
+            </VStack>
           </HStack>
           {/* Second row: skip previous, play/pause, skip next */}
           <HStack space={4} justifyContent="center" alignItems="center">
