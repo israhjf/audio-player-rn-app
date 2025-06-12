@@ -4,6 +4,8 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { useAudioPlayer } from '../../context/AudioPlayerContext';
 import { formatTime } from '../../utils/time';
 import { Image } from 'react-native';
+import { sampleTracks } from '../(home)/home';
+import { AudioTrack } from '../../types';
 
 export default function PlayerScreen() {
   const { state, play, pause, stop, seek, skipForward, skipBackward, setPlaybackRate } = useAudioPlayer();
@@ -23,6 +25,22 @@ export default function PlayerScreen() {
 
   const handlePlaybackRateChange = async (rate: number) => {
     await setPlaybackRate(rate);
+  };
+
+  const handleSkipPrevious = async () => {
+    if (!state.currentTrack) return;
+    const currentIndex = sampleTracks.findIndex((track: AudioTrack) => track.id === state.currentTrack?.id);
+    if (currentIndex > 0) {
+      await play(sampleTracks[currentIndex - 1]);
+    }
+  };
+
+  const handleSkipNext = async () => {
+    if (!state.currentTrack) return;
+    const currentIndex = sampleTracks.findIndex((track: AudioTrack) => track.id === state.currentTrack?.id);
+    if (currentIndex !== -1 && currentIndex < sampleTracks.length - 1) {
+      await play(sampleTracks[currentIndex + 1]);
+    }
   };
 
   return (
@@ -85,29 +103,53 @@ export default function PlayerScreen() {
         </VStack>
 
         {/* Controls */}
-        <HStack space={4} justifyContent="center" alignItems="center">
-          <IconButton
-            icon={<Icon as={MaterialIcons} name="replay-15" size={8} />}
-            onPress={skipBackward}
-            isDisabled={!state.currentTrack}
-          />
-          <IconButton
-            icon={
-              <Icon
-                as={MaterialIcons}
-                name={state.isPlaying ? 'pause-circle-filled' : 'play-circle-filled'}
-                size={16}
-              />
-            }
-            onPress={handlePlayPause}
-            isDisabled={!state.currentTrack}
-          />
-          <IconButton
-            icon={<Icon as={MaterialIcons} name="forward-15" size={8} />}
-            onPress={skipForward}
-            isDisabled={!state.currentTrack}
-          />
-        </HStack>
+        <VStack space={2} alignItems="center">
+          {/* First row: skip backward 15s, stop, skip forward 15s */}
+          <HStack space={4} justifyContent="center" alignItems="center">
+            <IconButton
+              icon={<Icon as={MaterialIcons} name="replay-15" size={8} />}
+              onPress={skipBackward}
+              isDisabled={!state.currentTrack}
+            />
+            <IconButton
+              icon={<Icon as={MaterialIcons} name="stop" size={10} />}
+              onPress={async () => {
+                await seek(0);
+                await pause();
+              }}
+              isDisabled={!state.currentTrack}
+            />
+            <IconButton
+              icon={<Icon as={MaterialIcons} name="forward-15" size={8} />}
+              onPress={skipForward}
+              isDisabled={!state.currentTrack}
+            />
+          </HStack>
+          {/* Second row: skip previous, play/pause, skip next */}
+          <HStack space={4} justifyContent="center" alignItems="center">
+            <IconButton
+              icon={<Icon as={MaterialIcons} name="skip-previous" size={8} />}
+              onPress={handleSkipPrevious}
+              isDisabled={!state.currentTrack}
+            />
+            <IconButton
+              icon={
+                <Icon
+                  as={MaterialIcons}
+                  name={state.isPlaying ? 'pause-circle-filled' : 'play-circle-filled'}
+                  size={16}
+                />
+              }
+              onPress={handlePlayPause}
+              isDisabled={!state.currentTrack}
+            />
+            <IconButton
+              icon={<Icon as={MaterialIcons} name="skip-next" size={8} />}
+              onPress={handleSkipNext}
+              isDisabled={!state.currentTrack}
+            />
+          </HStack>
+        </VStack>
 
         {/* Playback Speed */}
         <HStack space={2} justifyContent="center">
