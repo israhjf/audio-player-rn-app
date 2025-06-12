@@ -3,8 +3,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NativeBaseProvider, extendTheme } from 'native-base';
 import { AudioPlayerProvider } from '@/src/context/AudioPlayerContext';
-import PlaylistScreen from '@/src/screens/(home)/home';
-import PlayerScreen from '@/src/screens/(player)/player';
+import PlaylistScreen from '@/src/screens/PlayList/PlayList';
+import PlayerScreen from '@/src/screens/Player/Player';
 
 const Stack = createNativeStackNavigator();
 

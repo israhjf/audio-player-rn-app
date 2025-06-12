@@ -5,7 +5,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { useAudioPlayer } from '@/src/context/AudioPlayerContext';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { sampleTracks } from '@/src/screens/(home)/home';
+import { sampleTracks } from '@/src/screens/PlayList/PlayList';
 import { AudioTrack } from '@/src/types';
 
 type RootStackParamList = {
