@@ -46,11 +46,11 @@ export default function PlayerScreen() {
 
   return (
     <Box flex={1} bg={colorMode === 'dark' ? 'gray.900' : 'white'} safeArea>
-      <VStack space={4} flex={1} p={4}>
+      <VStack flex={1} space={2} p={2}>
         {/* Album Art */}
         <Box
+          flex={4}
           w="100%"
-          h="60%"
           bg={colorMode === 'dark' ? 'gray.800' : 'gray.200'}
           rounded="xl"
           justifyContent="center"
@@ -60,7 +60,7 @@ export default function PlayerScreen() {
             <Image
               source={{ uri: state.currentTrack.artwork }}
               alt="Album Art"
-              style={{ width: '100%', height: '100%' }}
+              style={{ width: '100%', height: '100%', borderRadius: 16 }}
               resizeMode="cover"
             />
           ) : (
@@ -74,17 +74,17 @@ export default function PlayerScreen() {
         </Box>
 
         {/* Track Info */}
-        <VStack space={2} alignItems="center">
-          <Text fontSize="xl" bold>
+        <VStack flex={1} space={1} alignItems="center" justifyContent="center">
+          <Text fontSize="xl" bold numberOfLines={1} ellipsizeMode="tail">
             {state.currentTrack?.title || 'No Track Selected'}
           </Text>
-          <Text fontSize="md" color="gray.500">
+          <Text fontSize="md" color="gray.500" numberOfLines={1} ellipsizeMode="tail">
             {state.currentTrack?.artist || 'Unknown Artist'}
           </Text>
         </VStack>
 
         {/* Progress Bar */}
-        <VStack space={2}>
+        <VStack flex={1} space={1} justifyContent="center">
           <Slider
             value={Math.floor(state.progress)}
             defaultValue={0}
@@ -104,18 +104,17 @@ export default function PlayerScreen() {
         </VStack>
 
         {/* Controls */}
-        <VStack space={2} alignItems="center">
+        <VStack flex={2} space={2} alignItems="center" justifyContent="center">
           {/* First row: skip backward 15s, stop, skip forward 15s */}
           <HStack space={4} justifyContent="center" alignItems="center">
-            <VStack alignItems="center">
+            <HStack alignItems="center">
+              <Text fontSize="xs">15</Text>
               <IconButton
                 icon={<Icon as={MaterialIcons} name="fast-rewind" size={8} />}
                 onPress={skipBackward}
                 isDisabled={!state.currentTrack}
               />
-              <Text fontSize="xs">15</Text>
-            </VStack>
-
+            </HStack>
             <IconButton
               icon={<Icon as={MaterialIcons} name="stop" size={10} />}
               onPress={async () => {
@@ -124,14 +123,14 @@ export default function PlayerScreen() {
               }}
               isDisabled={!state.currentTrack}
             />
-            <VStack alignItems="center">
+            <HStack alignItems="center">
               <IconButton
                 icon={<Icon as={MaterialIcons} name="fast-forward" size={8} />}
                 onPress={skipForward}
                 isDisabled={!state.currentTrack}
               />
               <Text fontSize="xs">15</Text>
-            </VStack>
+            </HStack>
           </HStack>
           {/* Second row: skip previous, play/pause, skip next */}
           <HStack space={4} justifyContent="center" alignItems="center">
@@ -160,7 +159,7 @@ export default function PlayerScreen() {
         </VStack>
 
         {/* Playback Speed */}
-        <HStack space={2} justifyContent="center">
+        <HStack flex={1} space={2} justifyContent="center" alignItems="center">
           {[0.5, 1, 1.5, 2].map((rate) => (
             <Button
               key={rate}
@@ -169,7 +168,7 @@ export default function PlayerScreen() {
               onPress={() => handlePlaybackRateChange(rate)}
               isDisabled={!state.currentTrack}
             >
-              {rate}x
+              {`${rate}x`}
             </Button>
           ))}
         </HStack>
