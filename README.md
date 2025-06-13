@@ -1,50 +1,92 @@
-# Welcome to your Expo app 👋
+# Audio Player React Native App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A feature-rich audio player built with React Native and Expo, supporting both iOS and Android platforms.
 
-## Get started
+## Features
 
-1. Install dependencies
+- 🎵 Playlist with artwork and track information
+- 🎧 Mini player with playback controls
+- 🎮 Full-screen player with advanced controls
+- 🌓 Light and dark theme support
+- 🌐 Spanish localization
+- 💾 Persistent playback state
+- 📱 Cross-platform support (iOS & Android)
 
+## Prerequisites
+
+- Node.js (v14 or higher)
+- npm or yarn
+- Expo CLI
+- iOS Simulator (for Mac) or Android Emulator
+- Expo Go app (for physical devices)
+
+## Setup Instructions
+
+1. Clone the repository:
+   ```bash
+   git clone [repository-url]
+   cd audio-player-rn-app
+   ```
+
+2. Install dependencies:
    ```bash
    npm install
    ```
 
-2. Start the app
-
+3. Start the development server:
    ```bash
    npx expo start
    ```
 
-In the output, you'll find options to open the app in a
+4. Run on your preferred platform:
+   - Press `i` for iOS simulator
+   - Press `a` for Android emulator
+   - Scan QR code with Expo Go app for physical devices
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Development Trade-offs
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+1. **Audio Library Choice**
+   - Using `expo-av` instead of the newer `expo-audio`
+   - Trade-off: `expo-av` is marked as deprecated but more stable
+   - Reason: `expo-audio` is still in beta and migration would be complex
 
-## Get a fresh project
+2. **Navigation Implementation**
+   - Switched from `expo-router` to `react-navigation`
+   - Trade-off: More boilerplate code but better control over navigation
+   - Reason: Better compatibility with existing navigation patterns
 
-When you're ready, run:
+3. **State Management**
+   - Using Context API instead of Redux
+   - Trade-off: Simpler implementation but less scalable
+   - Reason: Sufficient for current app complexity
 
-```bash
-npm run reset-project
-```
+## Known Limitations
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+1. **Audio Playback**
+   - Background playback may be interrupted on some Android devices
+   - Limited support for certain audio formats
+   - No gapless playback between tracks
 
-## Learn more
+2. **Performance**
+   - Large playlists might experience slight loading delays
+   - Artwork loading depends on network conditions
 
-To learn more about developing your project with Expo, look at the following resources:
+3. **Platform Specific**
+   - iOS: Requires additional setup for background audio
+   - Android: Some devices may have inconsistent audio behavior
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## Future Improvements
 
-## Join the community
+- Implement audio caching for offline playback
+- Add playlist management features
+- Support for more audio formats
+- Enhanced background playback reliability
+- Add more localization options
 
-Join our community of developers creating universal apps.
+## Contributing
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Feel free to submit issues and enhancement requests!
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
