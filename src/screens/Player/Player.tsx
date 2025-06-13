@@ -1,15 +1,16 @@
 import React from 'react';
 import { Box, Button, Icon, IconButton, Slider, Text, VStack, HStack } from 'native-base';
 import { MaterialIcons } from '@expo/vector-icons';
-import { useAudioPlayer } from '@/src/context/AudioPlayerContext';
-import { formatTime } from '@/src/utils/time';
+import { useAudioPlayer } from '../../context/AudioPlayerContext';
+import { formatTime } from '../../utils/time';
 import { Image } from 'react-native';
-import { sampleTracks } from '@/src/data/sampleTracks';
+import { sampleTracks } from '../../data/sampleTracks';
 import { AudioTrack } from '../../types';
-import { useTheme } from '@/src/theme/ThemeProvider';
+import { useTheme } from '../../theme/ThemeProvider';
+import LoadingOverlay from '../../components/LoadingOverlay';
 
 export default function PlayerScreen() {
-  const { state, play, pause, stop, seek, skipForward, skipBackward, setPlaybackRate } = useAudioPlayer();
+  const { state, play, pause, stop, seek, skipForward, skipBackward, setPlaybackRate, isLoading } = useAudioPlayer();
   const { background, surface, onSurface, primary, onPrimary } = useTheme();
 
   const handlePlayPause = async () => {
@@ -177,6 +178,7 @@ export default function PlayerScreen() {
           ))}
         </HStack>
       </VStack>
+      {isLoading && <LoadingOverlay />}
     </Box>
   );
 } 

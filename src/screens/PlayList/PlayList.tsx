@@ -1,15 +1,16 @@
 import React, { useEffect } from 'react';
 import { Box, HStack, Icon, Pressable, Text, VStack } from 'native-base';
 import { MaterialIcons } from '@expo/vector-icons';
-import { useAudioPlayer } from '@/src/context/AudioPlayerContext';
+import { useAudioPlayer } from '../../context/AudioPlayerContext';
 import { AudioTrack } from '../../types';
 import { Image, FlatList } from 'react-native';
-import MiniPlayer from '@/src/components/MiniPlayer';
-import { useTheme } from '@/src/theme/ThemeProvider';
-import { sampleTracks } from '@/src/data/sampleTracks';
+import MiniPlayer from '../../components/MiniPlayer';
+import { useTheme } from '../../theme/ThemeProvider';
+import { sampleTracks } from '../../data/sampleTracks';
+import LoadingOverlay from '../../components/LoadingOverlay';
 
 export default function PlaylistScreen() {
-  const { state, play } = useAudioPlayer();
+  const { state, play, isLoading } = useAudioPlayer();
   const { background, surface, onSurface, primary, onPrimary, outlineVariant } = useTheme();
 
   useEffect(() => {
@@ -98,6 +99,7 @@ export default function PlaylistScreen() {
         contentContainerStyle={{ paddingBottom: state.currentTrack ? 80 : 0 }}
       />
       {state.currentTrack && <MiniPlayer />}
+      {isLoading && <LoadingOverlay />}
     </Box>
   );
 } 

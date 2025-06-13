@@ -2,12 +2,12 @@ import React, { useEffect } from 'react';
 import { Box, HStack, Text, IconButton, Icon, Slider } from 'native-base';
 import { TouchableOpacity, Image } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { useAudioPlayer } from '@/src/context/AudioPlayerContext';
+import { useAudioPlayer } from '../context/AudioPlayerContext';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { sampleTracks } from '@/src/data/sampleTracks';
-import { AudioTrack } from '@/src/types';
-import { useTheme } from '@/src/theme/ThemeProvider';
+import { sampleTracks } from '../data/sampleTracks';
+import { AudioTrack } from '../types';
+import { useTheme } from '../theme/ThemeProvider';
 
 type RootStackParamList = {
   Playlist: undefined;

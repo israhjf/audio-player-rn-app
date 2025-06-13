@@ -13,6 +13,7 @@ interface AudioPlayerContextType {
   skipForward: () => Promise<void>;
   skipBackward: () => Promise<void>;
   setPlaybackRate: (rate: number) => Promise<void>;
+  isLoading: boolean;
 }
 
 const initialState: PlayerState = {
@@ -60,6 +61,7 @@ function reducer(state: PlayerState, action: Action): PlayerState {
 export function AudioPlayerProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [sound, setSound] = React.useState<Audio.Sound | null>(null);
+  const [isLoading, setIsLoading] = React.useState(false);
 
   // Load saved state on mount
   useEffect(() => {
@@ -147,6 +149,7 @@ export function AudioPlayerProvider({ children }: { children: React.ReactNode })
   const play = async (track: AudioTrack) => {
     console.log('AudioPlayerContext.tsx: Attempting to play track:', track.title);
     try {
+      setIsLoading(true);
       if (sound && state.currentTrack?.id === track.id) {
         console.log('AudioPlayerContext.tsx: Resuming current track from position:', state.progress);
         await sound.playAsync();
@@ -185,6 +188,8 @@ export function AudioPlayerProvider({ children }: { children: React.ReactNode })
       console.error('AudioPlayerContext.tsx: Error playing track:', error);
       // Reset state on error
       dispatch({ type: 'RESET' });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -289,6 +294,7 @@ export function AudioPlayerProvider({ children }: { children: React.ReactNode })
     skipForward,
     skipBackward,
     setPlaybackRate,
+    isLoading,
   };
 
   return (

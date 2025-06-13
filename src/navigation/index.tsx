@@ -2,11 +2,11 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NativeBaseProvider, extendTheme } from 'native-base';
-import { AudioPlayerProvider } from '@/src/context/AudioPlayerContext';
-import PlaylistScreen from '@/src/screens/PlayList/PlayList';
-import PlayerScreen from '@/src/screens/Player/Player';
-import { useTheme } from '@/src/theme/ThemeProvider';
-import { useLocalization } from '@/src/localization/LocalizationContext';
+import { AudioPlayerProvider } from '../context/AudioPlayerContext';
+import PlaylistScreen from '../screens/PlayList/PlayList';
+import PlayerScreen from '../screens/Player/Player';
+import { useTheme } from '../theme/ThemeProvider';
+import { useLocalization } from '../localization/LocalizationContext';
 
 const Stack = createNativeStackNavigator();
 

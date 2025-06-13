@@ -21,14 +21,16 @@
         "UIBackgroundModes": [
           "audio"
         ]
-      }
+      },
+      "jsEngine": "hermes"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.audioplayerrnapp"
+      "package": "com.audioplayerrnapp",
+      "jsEngine": "hermes"
     },
     "web": {
       "favicon": "./assets/favicon.png"
