@@ -95,9 +95,9 @@ export default function PlaylistScreen() {
         data={sampleTracks}
         renderItem={renderTrack}
         keyExtractor={(item) => item.id}
-        contentContainerStyle={{ paddingBottom: 80 }}
+        contentContainerStyle={{ paddingBottom: state.currentTrack ? 80 : 0 }}
       />
-      <MiniPlayer />
+      {state.currentTrack && <MiniPlayer />}
     </Box>
   );
 } 

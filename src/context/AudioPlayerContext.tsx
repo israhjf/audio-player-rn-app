@@ -2,6 +2,7 @@ import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import { Audio, AVPlaybackStatus } from 'expo-av';
 import { AudioTrack, PlayerState } from '../types';
 import { Platform } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface AudioPlayerContextType {
   state: PlayerState;
@@ -22,6 +23,8 @@ const initialState: PlayerState = {
   playbackRate: 1,
 };
 
+const STORAGE_KEY = '@audio_player_state';
+
 const AudioPlayerContext = createContext<AudioPlayerContextType | undefined>(undefined);
 
 type Action =
@@ -30,6 +33,7 @@ type Action =
   | { type: 'SET_PROGRESS'; payload: number }
   | { type: 'SET_DURATION'; payload: number }
   | { type: 'SET_PLAYBACK_RATE'; payload: number }
+  | { type: 'RESTORE_STATE'; payload: PlayerState }
   | { type: 'RESET' };
 
 function reducer(state: PlayerState, action: Action): PlayerState {
@@ -44,6 +48,8 @@ function reducer(state: PlayerState, action: Action): PlayerState {
       return { ...state, duration: Math.floor(action.payload) };
     case 'SET_PLAYBACK_RATE':
       return { ...state, playbackRate: action.payload };
+    case 'RESTORE_STATE':
+      return action.payload;
     case 'RESET':
       return initialState;
     default:
@@ -54,6 +60,61 @@ function reducer(state: PlayerState, action: Action): PlayerState {
 export function AudioPlayerProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [sound, setSound] = React.useState<Audio.Sound | null>(null);
+
+  // Load saved state on mount
+  useEffect(() => {
+    const loadState = async () => {
+      try {
+        console.log('AudioPlayerContext.tsx: Attempting to load saved state');
+        const savedState = await AsyncStorage.getItem(STORAGE_KEY);
+        console.log('AudioPlayerContext.tsx: Saved state from storage:', savedState);
+        
+        if (savedState) {
+          const parsedState = JSON.parse(savedState);
+          console.log('AudioPlayerContext.tsx: Parsed state:', parsedState);
+          
+          dispatch({ type: 'RESTORE_STATE', payload: parsedState });
+          
+          // If there was a track playing, load it
+          if (parsedState.currentTrack) {
+            console.log('AudioPlayerContext.tsx: Loading saved track:', parsedState.currentTrack.title);
+            const { sound: newSound } = await Audio.Sound.createAsync(
+              { uri: parsedState.currentTrack.url },
+              { 
+                shouldPlay: false,
+                positionMillis: parsedState.progress,
+                rate: parsedState.playbackRate,
+                volume: 1.0,
+                isMuted: false,
+              },
+              onPlaybackStatusUpdate
+            );
+            console.log('AudioPlayerContext.tsx: Sound loaded successfully');
+            setSound(newSound);
+          }
+        } else {
+          console.log('AudioPlayerContext.tsx: No saved state found');
+        }
+      } catch (error) {
+        console.error('AudioPlayerContext.tsx: Error loading state:', error);
+      }
+    };
+    loadState();
+  }, []);
+
+  // Save state to AsyncStorage whenever it changes
+  useEffect(() => {
+    const saveState = async () => {
+      try {
+        console.log('AudioPlayerContext.tsx: Saving state:', state);
+        await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        console.log('AudioPlayerContext.tsx: State saved successfully');
+      } catch (error) {
+        console.error('AudioPlayerContext.tsx: Error saving state:', error);
+      }
+    };
+    saveState();
+  }, [state]);
 
   useEffect(() => {
     console.log('AudioPlayerContext.tsx: Provider mounted');
