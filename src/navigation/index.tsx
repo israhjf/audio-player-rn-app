@@ -6,6 +6,7 @@ import { AudioPlayerProvider } from '@/src/context/AudioPlayerContext';
 import PlaylistScreen from '@/src/screens/PlayList/PlayList';
 import PlayerScreen from '@/src/screens/Player/Player';
 import { useTheme } from '@/src/theme/ThemeProvider';
+import { useLocalization } from '@/src/localization/LocalizationContext';
 
 const Stack = createNativeStackNavigator();
 
@@ -17,6 +18,7 @@ const theme = extendTheme({
 
 export default function Index() {
   const { onPrimaryContainer, primaryContainer } = useTheme();
+  const { t } = useLocalization();
 
   return (
     <NativeBaseProvider theme={theme}>
@@ -32,12 +34,12 @@ export default function Index() {
             <Stack.Screen
               name="Playlist"
               component={PlaylistScreen}
-              options={{ title: 'Play List' }}
+              options={{ title: t('screens.playlist.title') }}
             />
             <Stack.Screen
               name="Player"
               component={PlayerScreen}
-              options={{ title: 'Now Playing', presentation: 'modal' }}
+              options={{ title: t('screens.player.title'), presentation: 'modal' }}
             />
           </Stack.Navigator>
         </NavigationContainer>

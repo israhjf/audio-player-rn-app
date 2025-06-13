@@ -4,7 +4,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { useAudioPlayer } from '@/src/context/AudioPlayerContext';
 import { formatTime } from '@/src/utils/time';
 import { Image } from 'react-native';
-import { sampleTracks } from '@/src/screens/PlayList/PlayList';
+import { sampleTracks } from '@/src/data/sampleTracks';
 import { AudioTrack } from '../../types';
 import { useTheme } from '@/src/theme/ThemeProvider';
 

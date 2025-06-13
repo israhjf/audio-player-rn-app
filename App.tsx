@@ -7,6 +7,7 @@ import { useLoadedAssets } from "./src/hooks/useLoadedAssets";
 import Index from "./src/navigation";
 import * as React from 'react';
 import { ThemeProvider } from './src/theme/ThemeProvider';
+import { LocalizationProvider } from './src/localization/LocalizationContext';
 
 export default function App() {
     const isLoadingComplete = useLoadedAssets();
@@ -16,10 +17,12 @@ export default function App() {
     } else {
       return (
         <ThemeProvider>
-          <SafeAreaProvider>
-            <Index />
-            <StatusBar />
-          </SafeAreaProvider>
+          <LocalizationProvider>
+            <SafeAreaProvider>
+              <Index />
+              <StatusBar />
+            </SafeAreaProvider>
+          </LocalizationProvider>
         </ThemeProvider>
       );
     }
