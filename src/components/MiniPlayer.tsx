@@ -7,6 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { sampleTracks } from '@/src/screens/PlayList/PlayList';
 import { AudioTrack } from '@/src/types';
+import { useTheme } from '@/src/theme/ThemeProvider';
 
 type RootStackParamList = {
   Playlist: undefined;
@@ -18,6 +19,7 @@ type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 const MiniPlayer = () => {
   const { state, play, pause, seek } = useAudioPlayer();
   const navigation = useNavigation<NavigationProp>();
+  const { surface, onSurface, primary, onPrimary, secondaryContainer } = useTheme();
 
   useEffect(() => {
     console.log('MiniPlayer.tsx: MiniPlayer mounted');
@@ -44,15 +46,15 @@ const MiniPlayer = () => {
       console.log('MiniPlayer.tsx: MiniPlayer pressed, navigating to player screen');
       navigation.navigate('Player');
     }}>
-      <Box bg="gray.900" px={3} py={2} borderTopWidth={1} borderColor="gray.700">
+      <Box bg={secondaryContainer} px={3} py={2} borderTopWidth={1} borderColor={primary}>
         <HStack alignItems="center" space={3}>
           <Image
             source={{ uri: state.currentTrack.artwork }}
             style={{ width: 40, height: 40, borderRadius: 4 }}
           />
           <Box flex={1}>
-            <Text color="white" bold numberOfLines={1}>{state.currentTrack.title}</Text>
-            <Text color="gray.400" fontSize="xs" numberOfLines={1}>{state.currentTrack.artist}</Text>
+            <Text color={onSurface} bold numberOfLines={1}>{state.currentTrack.title}</Text>
+            <Text color={onSurface} opacity={0.7} fontSize="xs" numberOfLines={1}>{state.currentTrack.artist}</Text>
             <Slider
               value={progress}
               defaultValue={0}
@@ -61,10 +63,10 @@ const MiniPlayer = () => {
               size="sm"
               mt={1}
             >
-              <Slider.Track>
-                <Slider.FilledTrack />
+              <Slider.Track bg={onPrimary}>
+                <Slider.FilledTrack bg={primary} />
               </Slider.Track>
-              <Slider.Thumb />
+              <Slider.Thumb bg={primary} />
             </Slider>
           </Box>
           <IconButton
@@ -72,7 +74,7 @@ const MiniPlayer = () => {
               <Icon
                 as={MaterialIcons}
                 name={state.isPlaying ? 'pause' : 'play-arrow'}
-                color="white"
+                color={onSurface}
                 size={6}
               />
             }
@@ -90,7 +92,7 @@ const MiniPlayer = () => {
             variant="ghost"
           />
           <IconButton
-            icon={<Icon as={MaterialIcons} name="skip-next" color="white" size={6} />}
+            icon={<Icon as={MaterialIcons} name="skip-next" color={onSurface} size={6} />}
             onPress={handleNextTrack}
             variant="ghost"
           />

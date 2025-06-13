@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
-import { Box, HStack, Icon, Pressable, Text, VStack, useColorMode } from 'native-base';
+import { Box, HStack, Icon, Pressable, Text, VStack } from 'native-base';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useAudioPlayer } from '@/src/context/AudioPlayerContext';
 import { AudioTrack } from '../../types';
 import { Image, FlatList } from 'react-native';
 import MiniPlayer from '@/src/components/MiniPlayer';
+import { useTheme } from '@/src/theme/ThemeProvider';
 
 // Sample tracks - replace with your actual tracks
 export const sampleTracks: AudioTrack[] = [
@@ -82,7 +83,7 @@ export const sampleTracks: AudioTrack[] = [
 
 export default function PlaylistScreen() {
   const { state, play } = useAudioPlayer();
-  const { colorMode } = useColorMode();
+  const { background, surface, onSurface, primary, onPrimary, outlineVariant } = useTheme();
 
   useEffect(() => {
     console.log('PlayList.tsx: PlaylistScreen mounted');
@@ -107,15 +108,15 @@ export default function PlaylistScreen() {
         <HStack
           space={4}
           p={4}
-          bg={colorMode === 'dark' ? 'gray.800' : 'white'}
+          bg={surface}
           borderBottomWidth={1}
-          borderBottomColor={colorMode === 'dark' ? 'gray.700' : 'gray.200'}
+          borderBottomColor={outlineVariant}
           alignItems="center"
         >
           <Box
             w={12}
             h={12}
-            bg={colorMode === 'dark' ? 'gray.700' : 'gray.200'}
+            bg={background}
             rounded="md"
             justifyContent="center"
             alignItems="center"
@@ -132,7 +133,7 @@ export default function PlaylistScreen() {
                 as={MaterialIcons}
                 name="music-note"
                 size={6}
-                color={colorMode === 'dark' ? 'gray.400' : 'gray.600'}
+                color={onSurface}
               />
             )}
           </Box>
@@ -140,11 +141,11 @@ export default function PlaylistScreen() {
             <Text
               fontSize="md"
               bold
-              color={isPlaying ? 'primary.500' : undefined}
+              color={isPlaying ? primary : onSurface}
             >
               {item.title}
             </Text>
-            <Text fontSize="sm" color="gray.500">
+            <Text fontSize="sm" color={onSurface} opacity={0.7}>
               {item.artist}
             </Text>
           </VStack>
@@ -153,7 +154,7 @@ export default function PlaylistScreen() {
               as={MaterialIcons}
               name="arrow-back"
               size={6}
-              color="primary.500"
+              color={primary}
             />
           )}
         </HStack>
@@ -162,7 +163,7 @@ export default function PlaylistScreen() {
   };
 
   return (
-    <Box flex={1} bg={colorMode === 'dark' ? 'gray.900' : 'white'} safeArea>
+    <Box flex={1} bg={background} safeAreaBottom>
       <FlatList
         data={sampleTracks}
         renderItem={renderTrack}

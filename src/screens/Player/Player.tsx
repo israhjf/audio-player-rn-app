@@ -1,16 +1,16 @@
 import React from 'react';
-import { Box, Button, Icon, IconButton, Slider, Text, VStack, HStack, useColorMode } from 'native-base';
+import { Box, Button, Icon, IconButton, Slider, Text, VStack, HStack } from 'native-base';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useAudioPlayer } from '@/src/context/AudioPlayerContext';
 import { formatTime } from '@/src/utils/time';
 import { Image } from 'react-native';
 import { sampleTracks } from '@/src/screens/PlayList/PlayList';
 import { AudioTrack } from '../../types';
-
+import { useTheme } from '@/src/theme/ThemeProvider';
 
 export default function PlayerScreen() {
   const { state, play, pause, stop, seek, skipForward, skipBackward, setPlaybackRate } = useAudioPlayer();
-  const { colorMode } = useColorMode();
+  const { background, surface, onSurface, primary, onPrimary } = useTheme();
 
   const handlePlayPause = async () => {
     if (state.isPlaying) {
@@ -45,13 +45,13 @@ export default function PlayerScreen() {
   };
 
   return (
-    <Box flex={1} bg={colorMode === 'dark' ? 'gray.900' : 'white'} safeArea>
+    <Box flex={1} bg={background} safeArea>
       <VStack flex={1} space={2} p={2}>
         {/* Album Art */}
         <Box
           flex={4}
           w="100%"
-          bg={colorMode === 'dark' ? 'gray.800' : 'gray.200'}
+          bg={surface}
           rounded="xl"
           justifyContent="center"
           alignItems="center"
@@ -68,17 +68,17 @@ export default function PlayerScreen() {
               as={MaterialIcons}
               name="music-note"
               size={100}
-              color={colorMode === 'dark' ? 'gray.400' : 'gray.600'}
+              color={onSurface}
             />
           )}
         </Box>
 
         {/* Track Info */}
         <VStack flex={1} space={1} alignItems="center" justifyContent="center">
-          <Text fontSize="xl" bold numberOfLines={1} ellipsizeMode="tail">
+          <Text fontSize="xl" bold numberOfLines={1} ellipsizeMode="tail" color={onSurface}>
             {state.currentTrack?.title || 'No Track Selected'}
           </Text>
-          <Text fontSize="md" color="gray.500" numberOfLines={1} ellipsizeMode="tail">
+          <Text fontSize="md" color={onSurface} opacity={0.7} numberOfLines={1} ellipsizeMode="tail">
             {state.currentTrack?.artist || 'Unknown Artist'}
           </Text>
         </VStack>
@@ -93,13 +93,13 @@ export default function PlayerScreen() {
             isDisabled={!state.currentTrack}
           >
             <Slider.Track>
-              <Slider.FilledTrack />
+              <Slider.FilledTrack bg={primary} />
             </Slider.Track>
-            <Slider.Thumb />
+            <Slider.Thumb bg={primary} />
           </Slider>
           <HStack justifyContent="space-between">
-            <Text>{formatTime(state.progress)}</Text>
-            <Text>{formatTime(state.duration)}</Text>
+            <Text color={onSurface}>{formatTime(state.progress)}</Text>
+            <Text color={onSurface}>{formatTime(state.duration)}</Text>
           </HStack>
         </VStack>
 
@@ -108,15 +108,15 @@ export default function PlayerScreen() {
           {/* First row: skip backward 15s, stop, skip forward 15s */}
           <HStack space={4} justifyContent="center" alignItems="center">
             <HStack alignItems="center">
-              <Text fontSize="xs">15</Text>
+              <Text fontSize="xs" color={onSurface}>15</Text>
               <IconButton
-                icon={<Icon as={MaterialIcons} name="fast-rewind" size={8} />}
+                icon={<Icon as={MaterialIcons} name="fast-rewind" size={8} color={onSurface} />}
                 onPress={skipBackward}
                 isDisabled={!state.currentTrack}
               />
             </HStack>
             <IconButton
-              icon={<Icon as={MaterialIcons} name="stop" size={10} />}
+              icon={<Icon as={MaterialIcons} name="stop" size={10} color={onSurface} />}
               onPress={async () => {
                 await seek(0);
                 await pause();
@@ -125,17 +125,17 @@ export default function PlayerScreen() {
             />
             <HStack alignItems="center">
               <IconButton
-                icon={<Icon as={MaterialIcons} name="fast-forward" size={8} />}
+                icon={<Icon as={MaterialIcons} name="fast-forward" size={8} color={onSurface} />}
                 onPress={skipForward}
                 isDisabled={!state.currentTrack}
               />
-              <Text fontSize="xs">15</Text>
+              <Text fontSize="xs" color={onSurface}>15</Text>
             </HStack>
           </HStack>
           {/* Second row: skip previous, play/pause, skip next */}
           <HStack space={4} justifyContent="center" alignItems="center">
             <IconButton
-              icon={<Icon as={MaterialIcons} name="skip-previous" size={8} />}
+              icon={<Icon as={MaterialIcons} name="skip-previous" size={8} color={onSurface} />}
               onPress={handleSkipPrevious}
               isDisabled={!state.currentTrack}
             />
@@ -145,13 +145,14 @@ export default function PlayerScreen() {
                   as={MaterialIcons}
                   name={state.isPlaying ? 'pause-circle-filled' : 'play-circle-filled'}
                   size={16}
+                  color={primary}
                 />
               }
               onPress={handlePlayPause}
               isDisabled={!state.currentTrack}
             />
             <IconButton
-              icon={<Icon as={MaterialIcons} name="skip-next" size={8} />}
+              icon={<Icon as={MaterialIcons} name="skip-next" size={8} color={onSurface} />}
               onPress={handleSkipNext}
               isDisabled={!state.currentTrack}
             />
@@ -167,6 +168,9 @@ export default function PlayerScreen() {
               variant={state.playbackRate === rate ? 'solid' : 'outline'}
               onPress={() => handlePlaybackRateChange(rate)}
               isDisabled={!state.currentTrack}
+              bg={state.playbackRate === rate ? primary : 'transparent'}
+              _text={{ color: state.playbackRate === rate ? onPrimary : onSurface }}
+              borderColor={primary}
             >
               {`${rate}x`}
             </Button>

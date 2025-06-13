@@ -5,6 +5,7 @@ import { NativeBaseProvider, extendTheme } from 'native-base';
 import { AudioPlayerProvider } from '@/src/context/AudioPlayerContext';
 import PlaylistScreen from '@/src/screens/PlayList/PlayList';
 import PlayerScreen from '@/src/screens/Player/Player';
+import { useTheme } from '@/src/theme/ThemeProvider';
 
 const Stack = createNativeStackNavigator();
 
@@ -14,22 +15,24 @@ const theme = extendTheme({
   },
 });
 
-export default function Index({ colorScheme }: { colorScheme: string }) {
+export default function Index() {
+  const { onPrimaryContainer, primaryContainer } = useTheme();
+
   return (
     <NativeBaseProvider theme={theme}>
       <AudioPlayerProvider>
         <NavigationContainer>
           <Stack.Navigator
             screenOptions={{
-              headerStyle: { backgroundColor: theme.colors.primary[500] },
-              headerTintColor: '#fff',
+              headerStyle: { backgroundColor: primaryContainer },
+              headerTintColor: onPrimaryContainer,
               headerTitleStyle: { fontWeight: 'bold' },
             }}
           >
             <Stack.Screen
               name="Playlist"
               component={PlaylistScreen}
-              options={{ title: 'Playlist' }}
+              options={{ title: 'Play List' }}
             />
             <Stack.Screen
               name="Player"
