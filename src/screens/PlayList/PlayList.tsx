@@ -168,7 +168,7 @@ export default function PlaylistScreen() {
         data={sampleTracks}
         renderItem={renderTrack}
         keyExtractor={(item) => item.id}
-        contentContainerStyle={{ paddingBottom: 80 }} // Add extra space for mini player
+        contentContainerStyle={{ paddingBottom: 80 }}
       />
       <MiniPlayer />
     </Box>

@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import { Audio, AVPlaybackStatus } from 'expo-av';
 import { AudioTrack, PlayerState } from '../types';
+import { Platform } from 'react-native';
 
 interface AudioPlayerContextType {
   state: PlayerState;
@@ -56,6 +57,24 @@ export function AudioPlayerProvider({ children }: { children: React.ReactNode })
 
   useEffect(() => {
     console.log('AudioPlayerContext.tsx: Provider mounted');
+    
+    // Configure audio session
+    const configureAudio = async () => {
+      try {
+        await Audio.setAudioModeAsync({
+          playsInSilentModeIOS: true,
+          staysActiveInBackground: true,
+          shouldDuckAndroid: true,
+          playThroughEarpieceAndroid: false,
+        });
+        console.log('AudioPlayerContext.tsx: Audio session configured successfully');
+      } catch (error) {
+        console.error('AudioPlayerContext.tsx: Error configuring audio session:', error);
+      }
+    };
+
+    configureAudio();
+
     return () => {
       console.log('AudioPlayerContext.tsx: Provider unmounting');
       if (sound) {
@@ -78,18 +97,33 @@ export function AudioPlayerProvider({ children }: { children: React.ReactNode })
         console.log('AudioPlayerContext.tsx: Unloading previous sound');
         await sound.unloadAsync();
       }
+
       console.log('AudioPlayerContext.tsx: Creating new sound instance');
       const { sound: newSound } = await Audio.Sound.createAsync(
         { uri: track.url },
-        { shouldPlay: true, rate: state.playbackRate },
+        { 
+          shouldPlay: true, 
+          rate: state.playbackRate,
+          volume: 1.0,
+          isMuted: false,
+        },
         onPlaybackStatusUpdate
       );
+
+      // Ensure the sound is loaded before proceeding
+      const status = await newSound.getStatusAsync();
+      if (!status.isLoaded) {
+        throw new Error('Failed to load audio track');
+      }
+
       setSound(newSound);
       dispatch({ type: 'SET_TRACK', payload: track });
       dispatch({ type: 'SET_PLAYING', payload: true });
       console.log('AudioPlayerContext.tsx: Track started playing:', track.title);
     } catch (error) {
       console.error('AudioPlayerContext.tsx: Error playing track:', error);
+      // Reset state on error
+      dispatch({ type: 'RESET' });
     }
   };
 
