@@ -12,6 +12,12 @@ A feature-rich audio player built with React Native and Expo, supporting both iO
 - 💾 Persistent playback state
 - 📱 Cross-platform support (iOS & Android)
 
+## Demo Video
+
+[![Audio Player Demo](https://img.youtube.com/vi/your-video-id/0.jpg)](https://www.youtube.com/watch?v=your-video-id)
+
+Watch the demo video to see the app in action, showcasing all features and functionality.
+
 ## Prerequisites
 
 - Node.js (v14 or higher)
@@ -62,18 +68,17 @@ A feature-rich audio player built with React Native and Expo, supporting both iO
 
 ## Known Limitations
 
-1. **Audio Playback**
-   - Background playback may be interrupted on some Android devices
-   - Limited support for certain audio formats
-   - No gapless playback between tracks
+1. **iOS Performance Issues:**
+   - On the Player screen (tested on an iPhone 7), I've noticed occasional lag when:
+     - Using the playback speed control
+     - Skipping to the next or previous song
+     - Dragging the progress slider
+   - This may be related to the older hardware, but it's something I plan to optimize in a second iteration.
 
-2. **Performance**
-   - Large playlists might experience slight loading delays
-   - Artwork loading depends on network conditions
-
-3. **Platform Specific**
-   - iOS: Requires additional setup for background audio
-   - Android: Some devices may have inconsistent audio behavior
+2. **Offline Mode (Bonus)**
+   - Not implemented in this version.
+   - I've researched approaches using `expo-media-library` and `expo-file-system` to cache audio files locally.
+   - This feature could be added in a future update to support offline playback.
 
 ## Future Improvements
 
@@ -83,10 +88,3 @@ A feature-rich audio player built with React Native and Expo, supporting both iO
 - Enhanced background playback reliability
 - Add more localization options
 
-## Contributing
-
-Feel free to submit issues and enhancement requests!
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
