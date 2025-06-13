@@ -49,6 +49,23 @@ Watch the demo video to see the app in action, showcasing all features and funct
    - Press `a` for Android emulator
    - Scan QR code with Expo Go app for physical devices
 
+## Running Tests
+
+The project includes 3 simple unit tests for the AudioPlayerContext. To run the tests:
+
+1. Run all tests:
+   ```bash
+   npm test
+   ```
+
+The tests cover:
+- Play/pause functionality
+- State persistence
+- Track navigation
+- Audio playback controls
+
+Test files are located in `src/context/__tests__/AudioPlayerContext.test.tsx`
+
 ## Development Trade-offs
 
 1. **Audio Library Choice**
