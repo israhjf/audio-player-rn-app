@@ -1,4 +1,4 @@
-# Audio Player React Native App
+# Audio Player React Native App (Submitted June 13, 2025)
 
 A feature-rich audio player built with React Native and Expo, supporting both iOS and Android platforms.
 
@@ -8,7 +8,7 @@ A feature-rich audio player built with React Native and Expo, supporting both iO
 - 🎧 Mini player with playback controls
 - 🎮 Full-screen player with advanced controls
 - 🌓 Light and dark theme support
-- 🌐 Spanish localization
+- 🌐 English/Spanish localization
 - 💾 Persistent playback state
 - 📱 Cross-platform support (iOS & Android)
 
